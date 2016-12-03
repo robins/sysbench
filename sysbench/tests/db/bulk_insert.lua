@@ -10,14 +10,29 @@ function prepare()
    db_connect()
 
    for i = 0,num_threads-1 do
+
+   if (db_driver == "pgsql") then
+
       db_query([[
 CREATE TABLE IF NOT EXISTS sbtest]] .. i .. [[ (
-id INTEGER UNSIGNED NOT NULL,
-k INTEGER UNSIGNED DEFAULT '0' NOT NULL,
+id BIGINT NOT NULL,
+k BIGINT DEFAULT '0' NOT NULL,
+PRIMARY KEY (id)
+)]])
+
+   else
+
+      db_query([[
+CREATE TABLE IF NOT EXISTS sbtest]] .. i .. [[ (
+id ]] .. prepare_integer_unsigned .. [[ NOT NULL,
+k ]] .. prepare_integer_unsigned .. [[ DEFAULT '0' NOT NULL,
 PRIMARY KEY (id)
 ) ENGINE = InnoDB
 ]])
+
    end
+
+   end -- for
 end
 
 function event(thread_id)
@@ -30,6 +45,8 @@ function event(thread_id)
    cursize = cursize + 1
 
    db_bulk_insert_next("(" .. cursize .. "," .. cursize .. ")")
+   print("(" .. cursize .. "," .. cursize .. ")")
+
 end
 
 function thread_done(thread_9d)
