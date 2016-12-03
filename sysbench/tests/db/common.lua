@@ -91,7 +91,6 @@ pad CHAR(60) DEFAULT '' NOT NULL,
      print("Creating secondary indexes on 'sbtest" .. i .. "'...")
      db_query("CREATE INDEX k_" .. i .. " on sbtest" .. i .. "(k)")
    end
-
 end
 
 
@@ -173,7 +172,11 @@ function set_vars()
    if (oltp_create_secondary == 'off') then
       oltp_create_secondary = false
    else
-      oltp_create_secondary = true
+      if (db_driver == 'pgsql') then
+         oltp_create_secondary = false
+      else
+         oltp_create_secondary = true
+      end
    end
 
 end
