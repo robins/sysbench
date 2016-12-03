@@ -45,7 +45,6 @@ function event(thread_id)
    cursize = cursize + 1
 
    db_bulk_insert_next("(" .. cursize .. "," .. cursize .. ")")
-   print("(" .. cursize .. "," .. cursize .. ")")
 
 end
 
